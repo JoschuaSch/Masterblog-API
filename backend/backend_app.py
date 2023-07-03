@@ -20,7 +20,6 @@ def add_post():
     data = request.get_json()
     title = data.get('title')
     content = data.get('content')
-
     if not title or not content:
         return jsonify({"message": "Title and content are required"}), 400
     new_id = max(post["id"] for post in POSTS) + 1 if POSTS else 1
@@ -31,6 +30,15 @@ def add_post():
     }
     POSTS.append(new_post)
     return jsonify(new_post), 201
+
+
+@app.route('/api/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    post = next((post for post in POSTS if post["id"] == post_id), None)
+    if post is None:
+        return jsonify({"message": f"Post with id {post_id} not found"}), 404
+    POSTS.remove(post)
+    return jsonify({"message": f"Post with id {post_id} has been deleted successfully."}), 200
 
 
 if __name__ == '__main__':
