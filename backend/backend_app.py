@@ -12,6 +12,15 @@ POSTS = [
 
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
+    sort_key = request.args.get('sort')
+    direction = request.args.get('direction')
+    valid_sort_keys = ['title', 'content']
+    if sort_key and sort_key not in valid_sort_keys:
+        return jsonify({"message": "Invalid sort field. Valid fields are 'title' and 'content'."}), 400
+    if direction and direction not in ['asc', 'desc']:
+        return jsonify({"message": "Invalid sort direction. Valid directions are 'asc' and 'desc'."}), 400
+    if sort_key:
+        return jsonify(sorted(POSTS, key=lambda x: x[sort_key], reverse=direction == 'desc'))
     return jsonify(POSTS)
 
 
@@ -39,6 +48,27 @@ def delete_post(post_id):
         return jsonify({"message": f"Post with id {post_id} not found"}), 404
     POSTS.remove(post)
     return jsonify({"message": f"Post with id {post_id} has been deleted successfully."}), 200
+
+
+@app.route('/api/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    post = next((post for post in POSTS if post["id"] == post_id), None)
+    if post is None:
+        return jsonify({"message": f"Post with id {post_id} not found"}), 404
+    data = request.get_json()
+    post.update({
+        "title": data.get("title", post["title"]),
+        "content": data.get("content", post["content"]),
+    })
+    return jsonify(post), 200
+
+
+@app.route('/api/posts/search', methods=['GET'])
+def search_posts():
+    title_term = request.args.get('title', '')
+    content_term = request.args.get('content', '')
+    matching_posts = [post for post in POSTS if title_term in post['title'] or content_term in post['content']]
+    return jsonify(matching_posts)
 
 
 if __name__ == '__main__':
