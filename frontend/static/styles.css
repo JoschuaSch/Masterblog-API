@@ -69,7 +69,7 @@ body {
 .post {
     width: 48%;
     margin: 10px 0;
-    border: 1px solid #999;
+    border: 10px solid #1a2b42;
     border-radius: 8px;
     background-color: #ddd;
     padding: 20px;
@@ -226,4 +226,19 @@ body {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+.post button.update-btn {
+    position: absolute;
+    top: 10px;
+    right: 60px;
+    background-color: #44bb44;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.post button.update-btn:hover {
+    background-color: #33aa33;
 }
