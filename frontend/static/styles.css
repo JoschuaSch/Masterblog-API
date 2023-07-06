@@ -173,8 +173,8 @@ body {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
-  left: 10;
+  z-index: 1000;
+  left: 0;
   top: 0;
   width: 100%;
   height: 100%;
@@ -184,15 +184,39 @@ body {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 10% auto;
   padding: 20px;
-  border: 10px solid #888;
+  border: 10px solid #1a2b42;
   width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-content .input-field {
+  flex-direction: column;
+  width: 100%;
+  align-items: stretch;
+}
+
+.modal-content .input-field input {
+  margin-bottom: 10px;
+  border: 1px solid #1a2b42;  // Add border
+  padding: 5px;
+  border-radius: 4px;
+}
+
+
+.modal-content .input-field button {
+  align-self: center;
+  margin-top: 20px;
 }
 
 .close {
   color: #aaa;
-  float: right;
+  position: absolute;
+  right: 20px;
+  top: 20px;
   font-size: 28px;
   font-weight: bold;
 }
@@ -203,4 +227,3 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
-
