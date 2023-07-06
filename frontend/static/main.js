@@ -50,19 +50,23 @@ function loadPosts() {
 
 function addPost() {
     var baseUrl = document.getElementById('api-base-url').value;
-    var postTitle = document.getElementById('post-title').value;
-    var postContent = document.getElementById('post-content').value;
-    var postAuthor = document.getElementById('post-author').value;
+    var postTitle = document.getElementById('post-title');
+    var postContent = document.getElementById('post-content');
+    var postAuthor = document.getElementById('post-author');
 
     fetch(baseUrl + '/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: postTitle, content: postContent, author: postAuthor })
+        body: JSON.stringify({ title: postTitle.value, content: postContent.value, author: postAuthor.value })
     })
     .then(response => response.json())
     .then(post => {
         console.log('Post added:', post);
         loadPosts();
+        postTitle.value = '';
+        postContent.value = '';
+        postAuthor.value = '';
+        modal.style.display = "none";
     })
     .catch(error => console.error('Error:', error));
 }
@@ -78,4 +82,23 @@ function deletePost(postId) {
         loadPosts();
     })
     .catch(error => console.error('Error:', error));
+}
+
+//Modal logic
+var modal = document.getElementById("addPostModal");
+var btn = document.getElementById("openAddPostModal");
+var span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
 }

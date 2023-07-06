@@ -23,21 +23,28 @@
     </div>
     <div class="image-background"></div>
     <div class="container">
-        <div class="input-field">
-            <input type="text" id="api-base-url" placeholder="Enter API Base URL" value="http://127.0.0.1:5002/api">
-            <button onclick="loadPosts()">Load Posts</button>
-        </div>
-        <div class="input-field">
-            <input type="text" id="post-title" placeholder="Enter Post Title">
-            <input type="text" id="post-content" placeholder="Enter Post Content">
-            <input type="text" id="post-author" placeholder="Enter Post Author">
-            <button onclick="addPost()">Add Post</button>
+        <div class="control-field">
+            <div class="input-field">
+                <input type="text" id="api-base-url" placeholder="Enter API Base URL" value="http://127.0.0.1:5002/api">
+                <button onclick="loadPosts()">Load Posts</button>
+                <button id="openAddPostModal">Add Post</button>
+            </div>
         </div>
         <div id="post-container">
             <!-- Blog posts will be inserted here by JavaScript -->
         </div>
     </div>
-
+    <div id="addPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="input-field">
+                <input type="text" id="post-title" placeholder="Enter Post Title">
+                <input type="text" id="post-content" placeholder="Enter Post Content">
+                <input type="text" id="post-author" placeholder="Enter Post Author">
+                <button onclick="addPost()">Submit Post</button>
+            </div>
+        </div>
+    </div>
     <script src="static/main.js"></script>
 </body>
 </html>
