@@ -8,20 +8,28 @@ CORS(app)
 
 
 def load_posts():
+    """Load all posts from the JSON file. If file not found, create it."""
     try:
-        with open('../posts.json', 'r') as f:
+        with open('posts.json', 'r') as f:
             return json.load(f)
     except FileNotFoundError:
+        with open('posts.json', 'w') as f:
+            json.dump([], f)
         return []
 
 
 def save_posts(posts):
-    with open('../posts.json', 'w') as f:
-        json.dump(posts, f)
+    """Save all posts to the JSON file."""
+    try:
+        with open('posts.json', 'w') as f:
+            json.dump(posts, f)
+    except Exception as e:
+        print(f"Error saving posts: {e}")
 
 
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
+    """Return a list of all posts, optionally sorted by a key and direction asc,desc."""
     posts = load_posts()
     sort_key = request.args.get('sort')
     direction = request.args.get('direction')
@@ -42,15 +50,16 @@ def get_posts():
 
 @app.route('/api/posts', methods=['POST'])
 def add_post():
+    """Create a new post with the given title, content, author, and date."""
     posts = load_posts()
     data = request.get_json()
     title = data.get('title')
     content = data.get('content')
     author = data.get('author')
-    date = data.get('date')
-    if not all([title, content, author, date]):
-        return jsonify({"message": "Title, content, author and date are required"}), 400
+    if not all([title, content, author]):
+        return jsonify({"message": "Title, content, and author are required"}), 400
     new_id = max(post["id"] for post in posts) + 1 if posts else 1
+    date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     new_post = {
         "id": new_id,
         "title": title,
@@ -65,6 +74,7 @@ def add_post():
 
 @app.route('/api/posts/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
+    """Delete the post with the given ID."""
     posts = load_posts()
     post = next((post for post in posts if post["id"] == post_id), None)
     if post is None:
@@ -76,6 +86,7 @@ def delete_post(post_id):
 
 @app.route('/api/posts/<int:post_id>', methods=['PUT'])
 def update_post(post_id):
+    """Update the post with the given ID and new data."""
     posts = load_posts()
     post = next((post for post in posts if post["id"] == post_id), None)
     if post is None:
@@ -93,6 +104,7 @@ def update_post(post_id):
 
 @app.route('/api/posts/search', methods=['GET'])
 def search_posts():
+    """Return a list of posts that match the given search term in title, content, author, or date."""
     posts = load_posts()
     term = request.args.get('term', '')
     matching_posts = [post for post in posts if
