@@ -14,6 +14,9 @@ function loadPosts() {
     fetch(baseUrl + '/posts')
         .then(response => response.json())
         .then(data => {
+            // Sort the posts by date in descending order
+            data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
             const postContainer = document.getElementById('post-container');
             postContainer.innerHTML = '';
             data.forEach(post => {
